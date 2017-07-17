@@ -9,8 +9,8 @@ class Course(models.Model):
     detail = models.TextField(verbose_name="课程详情")  # 暂时
     degree = models.CharField(verbose_name="难度", choices=(("cj", "初级"), ("zj", "中级"), ("gj", "高级")), max_length=2)
     learn_times = models.IntegerField(default=0, verbose_name="学习时长(分钟数)")
-    students = models.IntegerField(max_length=10, default=0, verbose_name="学习人数")
-    fav_nums = models.IntegerField(max_length=10, default=0, verbose_name="收藏人数")
+    students = models.IntegerField(default=0, verbose_name="学习人数")
+    fav_nums = models.IntegerField(default=0, verbose_name="收藏人数", )
     image = models.ImageField(upload_to="courses/%y%m", verbose_name="封面图", max_length=100)
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")

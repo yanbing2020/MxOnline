@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,7 +49,7 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
 ]
-AUTH_USER_MODEL = 'users.UserProfile'  # step1
+AUTH_USER_MODEL = 'users.UserProfile'  # step1 使用自定义的用户管理表
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,7 +92,8 @@ DATABASES = {
         'NAME': "mxonline",
         'USER': 'root',
         'PASSWORD': "12345678",
-        'PORT': "3306"
+        'PORT': "3306",
+        # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  # OPTIONSDATABASES
     }
 }
 
@@ -131,3 +135,6 @@ USE_TZ = False  # True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
