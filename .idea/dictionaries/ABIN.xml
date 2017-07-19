@@ -6,8 +6,10 @@
       <w>mxonline</w>
       <w>optionsdatabases</w>
       <w>pythonpath</w>
+      <w>smtp</w>
       <w>wsgi</w>
       <w>xadmin</w>
+      <w>yinghua</w>
     </words>
   </dictionary>
 </component>
