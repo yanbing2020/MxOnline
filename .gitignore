@@ -100,3 +100,4 @@ ENV/
 # mypy
 .mypy_cache/
 /apps/users/migrations/0002_auto_20170717_1925.py
+/.idea/workspace.xml
