@@ -38,7 +38,7 @@ class CourseOrg(models.Model):
 
 
 class Teacher(models.Model):
-    org = models.ForeignKey(CourseOrg, verbose_name="所属机构")
+    org = models.ForeignKey(CourseOrg, verbose_name="所属机构", null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name="老师姓名")
     work_years = models.IntegerField(default=0, verbose_name="工作年限")
     work_company = models.CharField(max_length=50, verbose_name="就职名称")
@@ -46,9 +46,13 @@ class Teacher(models.Model):
     points = models.CharField(max_length=50, verbose_name="教学特点")
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
+    image = models.ImageField(upload_to="teacher/%y%m", verbose_name="封面图", max_length=100, null=True, blank=True)
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
         verbose_name = "教师信息"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+            return self.name
 
