@@ -1,11 +1,11 @@
-
+from django.http import HttpResponse
 
 from django.shortcuts import render
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Course
-from operation.models import UserFavorite
+from operation.models import UserFavorite, CourseComments
 from .models import CourseResource
 
 
@@ -53,6 +53,9 @@ class CourseDetailView(View):
         course.click_nums += 1
         course.save()
 
+        # 激活章节、评论不同标签
+        sort = request.GET.get('sort', '')
+
         has_fav_course = False
         has_fav_org = False
 
@@ -70,6 +73,7 @@ class CourseDetailView(View):
         return render(request, 'course-detail.html', {
             "course": course,
             "relate_courses": relate_courses,
+            "sort": sort,
             # "has_fav_course": has_fav_course,
             # "has_fav_org": has_fav_org,
         })
@@ -82,9 +86,57 @@ class CourseInfoView(View):
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course)
+        # 激活章节、评论不同标签
+        sort = request.GET.get('sort', '')
+
         return render(request, "course-video.html", {
             "course": course,
             "course_resources": all_resources,
+            "sort": sort,
         })
+
+
+class CommentsView(View):
+    """
+    课程评论
+    """
+    def get(self, request, course_id):
+        course = Course.objects.get(id=int(course_id))
+
+        # 激活章节、评论不同标签
+        sort = request.GET.get('sort', '')
+        all_resources = CourseResource.objects.filter(course=course)
+        all_comments = CourseComments.objects.filter(course=course)
+        all_comments = all_comments.order_by("-add_time")
+
+        return render(request, "course-comment.html", {
+            "course": course,
+            "course_resources": all_resources,
+            "all_comments": all_comments,
+            "sort": sort,
+        })
+
+
+class AddCommentView(View):
+    """
+    用户添加课程评论
+    """
+    def post(self, request):
+        # 判断登陆状态
+        if not request.user.is_authenticated():
+            return HttpResponse('{"status":"fail", "msg":"用户未登陆"}', content_type='application/json')
+
+        course_id = request.POST.get("course_id", 0)
+        comments = request.POST.get("comments", "")
+        if course_id > str(0) and comments is not None:
+            course_comments = CourseComments()
+            course = Course.objects.get(id=int(course_id))
+            course_comments.course = course
+            course_comments.comments = comments
+            course_comments.user = request.user
+            course_comments.save()
+            return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
 
 

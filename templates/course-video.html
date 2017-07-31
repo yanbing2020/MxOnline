@@ -50,8 +50,8 @@
             <div class="content">
                 <div class="mod-tab-menu">
                     <ul class="course-menu clearfix">
-                        <li><a class="ui-tabs-active active" id="learnOn"  href="course-video.html"><span>章节</span></a></li>
-                        <li><a id="commentOn" class="" href="course-comment.html"><span>评论</span></a></li>
+                        <li><a class="{% if sort == 'info' %}ui-tabs-active active{% endif %}" id="learnOn"  href="{% url 'course:course_info' course.id %}?sort=info"><span>章节</span></a></li>
+                        <li><a id="commentOn" class="{% if sort == 'comment' %}ui-tabs-active active{% endif %}" href="{% url 'course:course_comment' course.id %}?sort=comment"><span>评论</span></a></li>
                     </ul>
                 </div>
                 <div id="notice" class="clearfix">
